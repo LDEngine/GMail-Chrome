@@ -1,6 +1,6 @@
 $(function() {
-	chrome.storage.local.get('ldengine_api_url',function(items){
-		var API_URL = items.ldengine_api_url || "apps.ldengine.com";
+	chrome.storage.local.get('engine_api_url',function(items){
+		var API_URL = items.engine_api_url || "apps.engine.co";
 		if( API_URL.indexOf( "http" ) < 0 )
 	         API_URL = "https://" + API_URL;
 		chrome.storage.local.get( 'ldengine_log_level', function( items ) {

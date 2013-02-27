@@ -53,8 +53,8 @@ $(function() {
 
 			// For now, to avoid any weird issues w/ people who already installed
 			// the existing version, hard-code the production host
-			// API_URL = "apps.ldengine.com";
-			API_URL = items.ldengine_api_url || "https://apps.ldengine.com";
+			// API_URL = "apps.engine.co";
+			API_URL = items.ldengine_api_url || "https://apps.engine.co";
 				if( API_URL.indexOf( "http" ) < 0 )
 				 API_URL = "https://" + API_URL;
 
