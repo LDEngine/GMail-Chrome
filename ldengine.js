@@ -80,9 +80,9 @@ $(function() {
 		$.get(chrome.extension.getURL("senderInfo.tmpl"), function(data) {
 			$.templates('senderInfoTemplate', data);
 		}, 'html'),
-		// $.get(chrome.extension.getURL("noResonse.tmpl"), function(data) {
-		// 	$.templates('noResonseTemplate', data);
-		// }, 'html'),
+		$.get(chrome.extension.getURL("bottomBar.tmpl"), function(data) {
+	 		$.templates('bottomBarTemplate', data);
+		}, 'html'),
 		$.get(chrome.extension.getURL("noSnippets.tmpl"), function(data) {
 			$.templates('noSnippetsTemplate', data);
 		}, 'html')).then(function() {
@@ -542,6 +542,8 @@ var LDEngine = {
 
 			// No data, just a cheap way to render the html template
 			$.link.ldengineTemplate('#ldengine');
+			$('#accordion').hide();
+			$('.lde-bottom-bar').hide();
 		},
 
 		// Append loading spinner to sidebar, right now the process of checking login
@@ -598,8 +600,14 @@ var LDEngine = {
 
 			
 
-			// Add the related emails to the sidebar
+			// Add the related emails to the sidebar, do rendering of the middle parts
+			////////////////////////////////////////////	
+			$('#accordion').show();
+			$('.msg-header').append("<span class=\"msg-header-count\">" + messageSnippets.length + "</span>" );
+			$('.lde-bottom-bar').show();
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
+			$("#accordion").accordion({ animate: 500,collapsible: true, active: false } );
+			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
 
 			if (!$('.lde-related-emails').length) {
 				LDEngine.sidebar.append();
@@ -869,7 +877,7 @@ var LDEngine = {
 				// Retemplate
 				$.link.popupTemplate($('#lde-popup'), LDEngine.popup.model);
 				// Hide the loading spinner and display inner content
-				$('.lde-ajax-spinner').hide();
+				$('.lde-ajax-popup').hide();
 				$('.lde-popup-content').show();
 			}
 			// Hook up the close button

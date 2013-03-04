@@ -12,8 +12,8 @@
   "content_scripts": [
     {
       "matches": [ "*://mail.google.com/*"],
-      "js" : ["async.min.js","jquery-1.8.2.min.js","underscore-min.js","date.js","jquery.dotdotdot-1.5.1.js","jsrender.js","jquery.views.js","jquery.observable.js","ldengine.js", "moment.min.js"],
-      "css" : ["ldengine.css", "hint.min.css"]
+      "js" : ["async.min.js","jquery-1.8.2.min.js","underscore-min.js","date.js","jquery.dotdotdot-1.5.1.js","jsrender.js","jquery.views.js","jquery.observable.js","ldengine.js", "moment.min.js", "jquery-ui-1.10.1.custom.min.js"],
+      "css" : ["ldengine.css", "hint.min.css", "jquery-ui-1.10.1.custom.css"]
     }
   ],
   "permissions": [
@@ -33,17 +33,26 @@
     "progressbar.tmpl",
     "unauthenticated.tmpl",
     "senderInfo.tmpl",
-    "noResponse.tmpl",
+    "bottomBar.tmpl",
     "noSnippets.tmpl",
     "ajax-loader.gif",
     "icon_close.gif",
     "close_message.gif",
     "image_anonymousLarge@2x.png",
     "logo_engine@2x.png",
+    "logo_engine@2x_dark.png",
 	"search_glass.png",
 	"gmail.png",
 	"facebook.png",
-	"Twitter.png"
+	"Twitter.png",
+	"logo_engine_dark.png"
   ],
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "browser_action": { 
+	  "default_icon": {
+		  "19" : "logo_engine_dark.png",
+		  "38" : "logo_engine_dark.png"
+		},
+	  "default_title": "Engine Inc."
+	}
 }
