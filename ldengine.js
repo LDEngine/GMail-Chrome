@@ -608,6 +608,7 @@ var LDEngine = {
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
 			$("#accordion").accordion({ animate: 500,collapsible: true, active: false } );
 			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
+			
 
 			if (!$('.lde-related-emails').length) {
 				LDEngine.sidebar.append();
@@ -620,6 +621,7 @@ var LDEngine = {
 
 			// Ellipsize the related email snippets
 			$('.lde-email-result').dotdotdot();
+			$('.lde-sender').dotdotdot();
 
 			// Bind click events to message snippets
 			for(var i = 0; i < messageSnippets.length; i++) {
@@ -916,10 +918,11 @@ var LDEngine = {
 _.bindAll(LDEngine.sidebar);
 
 // Watch for resize events and hide or show the sidebar accordingly
+/*
 $(function () {
 	$(window).bind('resize',_.throttle(function () {
 		if ($(window).width() < 1140) LDEngine.sidebar.hide(150);
 		else LDEngine.sidebar.show(250);
 	},25));
 });
-
+*/
