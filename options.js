@@ -11,8 +11,9 @@ $(function() {
 			$('#logLevel').val( LOG_LEVEL );
 			$('#save').click(function(){
 	
-			chrome.storage.local.set({ldengine_api_url:$('#api_url').val()});
+			chrome.storage.local.set({engine_api_url:$('#api_url').val()});
 			chrome.storage.local.set({ldengine_log_level:$('#logLevel').val()});
+			window.close();
 		});
 
 		});
