@@ -467,7 +467,7 @@ var LDEngine = {
 							}
 							_.map(messageSnippets, function(messageSnippet) {
 								if( messageSnippet.from && !messageSnippet.from.name )  {messageSnippet.from.name = messageSnippet.from.email;} 
-								
+								if( messageSnippet.from.name.length > 20 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,18) + '...'; }	
 								return _.extend(messageSnippet, {
 									date: messageSnippet.date && new Date(messageSnippet.date).toString('MMM d yy'),
 									from: _.extend(messageSnippet.from, {
@@ -493,7 +493,6 @@ var LDEngine = {
 								e.stopPropagation();
 								e.stopImmediatePropagation();
 							});
-							console.log(" END OF THE LINE");
 
 				//		});			
 				//	});
@@ -583,23 +582,21 @@ var LDEngine = {
 				case 'FacebookStatusMessage':
 				case 'Facebook':
 					var facebookURL = chrome.extension.getURL('facebook.png');
-					messageSnippets[each].appIcon = '<img width=20 height=20 src=\"' + facebookURL + '\">';
+					messageSnippets[each].appIcon = '<img width=15 height=15 src=\"' + facebookURL + '\">';
 					break;
 				case 'Tweet':
 					var twitterURL = chrome.extension.getURL('Twitter.png');
-					messageSnippets[each].appIcon = '<img width-20 height=20 src=\"' + twitterURL + '\">';
+					messageSnippets[each].appIcon = '<img width-15 height=15 src=\"' + twitterURL + '\">';
 					break;
 				case 'email':
 					var gmailURL = chrome.extension.getURL('gmail.png');
-					messageSnippets[each].appIcon = '<img width=20 height=20 src=\"' + gmailURL + '\">';
+					messageSnippets[each].appIcon = '<img width=15 height=15 src=\"' + gmailURL + '\">';
 					break;
 				default:
 				}
 
 			}
-
-			
-
+		
 			// Add the related emails to the sidebar, do rendering of the middle parts
 			////////////////////////////////////////////	
 			$('#accordion').show();
@@ -621,7 +618,8 @@ var LDEngine = {
 
 			// Ellipsize the related email snippets
 			$('.lde-email-result').dotdotdot();
-			$('.lde-sender').dotdotdot();
+			console.log(" Dot dot dot results");
+			console.log($('.lde-sender').dotdotdot());
 
 			// Bind click events to message snippets
 			for(var i = 0; i < messageSnippets.length; i++) {
