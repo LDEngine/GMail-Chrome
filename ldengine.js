@@ -467,7 +467,8 @@ var LDEngine = {
 							}
 							_.map(messageSnippets, function(messageSnippet) {
 								if( messageSnippet.from && !messageSnippet.from.name )  {messageSnippet.from.name = messageSnippet.from.email;} 
-								if( messageSnippet.from.name.length > 20 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,18) + '...'; }	
+								if( messageSnippet.from.name.length > 20 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,18) + '...'; }
+								if( messageSnippet.title.length > 28 ) { messageSnippet.title = messageSnippet.title.substr(0,25) + '...'; }
 								return _.extend(messageSnippet, {
 									date: messageSnippet.date && new Date(messageSnippet.date).toString('MMM d yy'),
 									from: _.extend(messageSnippet.from, {
@@ -600,10 +601,10 @@ var LDEngine = {
 			// Add the related emails to the sidebar, do rendering of the middle parts
 			////////////////////////////////////////////	
 			$('#accordion').show();
-			$('.msg-header').append("<span class=\"msg-header-count\">" + messageSnippets.length + "</span>" );
+			$('.msg-header').append("<span class=\"msg-header-count\">" + messageSnippets.length + "</span><span class=\"msg-header-arrow\">></span>" );
 			$('.lde-bottom-bar').show();
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
-			$("#accordion").accordion({ animate: 500,collapsible: true, active: false } );
+			$("#accordion").accordion({ animate: 900,collapsible: true, active: 1 } );
 			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
 			
 
