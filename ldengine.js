@@ -51,12 +51,12 @@ $(function() {
 		var getApiURLDeferredObj = $.Deferred();
 		chrome.storage.local.get('ldengine_api_url', function(items) {
 
-			// If there's nothing in there, default to the default production version.
-			API_URL = items.ldengine_api_url || "https://apps.ldengine.com";
-
-			// If there's no protocol specified, use https by default.
-			if( API_URL.indexOf( "http" ) < 0 )
-				API_URL = "https://" + API_URL;
+			// For now, to avoid any weird issues w/ people who already installed
+			// the existing version, hard-code the production host
+			// API_URL = "apps.engine.co";
+			API_URL = items.ldengine_api_url || "https://apps.engine.co";
+				if( API_URL.indexOf( "http" ) < 0 )
+				 API_URL = "https://" + API_URL;
 
 			getApiURLDeferredObj.resolve();
 		});
