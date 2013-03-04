@@ -17,7 +17,7 @@
 }
 
 .lde-logo-image {
-	background: url('chrome-extension://__MSG_@@extension_id__/logo_engine@2x_dark.png') no-repeat;
+	background: url('chrome-extension://__MSG_@@extension_id__/logo_engine@2x.png') no-repeat;
 	display: block;
 	width: 60%;
 	height: 80px;
