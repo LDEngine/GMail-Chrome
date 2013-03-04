@@ -110,10 +110,15 @@
 .lde-mag-glass {
 	background: url('chrome-extension://__MSG_@@extension_id__/search_glass.png') no-repeat center;
 	position: absolute;
-	width: 30px;
-	height: 25px;
+	width: 29px;
+	height: 24px;
 	margin: 10px 0 0 0;
-	right: 12px;
+	right: 5px;
+	border: 1px solid #222;
+}
+
+.lde-mag-glass:hover {
+	color: #222222;
 }
 
 input[type="text"] {
@@ -557,21 +562,19 @@ input[type="text"] {
 
 .lde-bottom-bar {
 	background-color: #EEEEEE;
-	margin-right: 12px;
 	text-align: center;
-	width: 240px;
 	height:30px;
+	width: 93%;
+	padding-right: 15px;
 }
 
 .lde-links-mailto {
 	font-size: 10px;
-	width: 92%;
-	padding-bottom: 5px;
-	margin-left: 0px;
 	text-decoration: none;
 	color: #222;
 	font-weight: bold;
 	opacity: 0.9;
+	width: 92%;
 }
 
 .lde-links-mailto:hover {
@@ -580,13 +583,11 @@ input[type="text"] {
 
 .lde-links-faq {
 	font-size: 10px;
-	width: 92%;
-	padding-bottom: 5px;
-	margin-left: 0px;
 	text-decoration: none;
 	color: #222;
 	font-weight: bold;
 	opacity: 0.9;
+	width: 92%;
 }
 
 .lde-links-faq:hover {
