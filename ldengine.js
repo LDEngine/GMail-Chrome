@@ -49,14 +49,14 @@ $(function() {
 	function getSettings() {
 		log.debug( 'getSettings()' );
 		var getApiURLDeferredObj = $.Deferred();
-		chrome.storage.local.get('ldengine_api_url', function(items) {
+		chrome.storage.local.get('engine_api_url', function(items) {
 
-			// For now, to avoid any weird issues w/ people who already installed
-			// the existing version, hard-code the production host
-			// API_URL = "apps.engine.co";
-			API_URL = items.ldengine_api_url || "https://apps.engine.co";
-				if( API_URL.indexOf( "http" ) < 0 )
-				 API_URL = "https://" + API_URL;
+			// If there's nothing in there, default to the default production version.
+			API_URL = items.engine_api_url || "https://apps.engine.co";
+
+			// If there's no protocol specified, use https by default.
+			if( API_URL.indexOf( "http" ) < 0 )
+				API_URL = "https://" + API_URL;
 
 			getApiURLDeferredObj.resolve();
 		});
@@ -80,9 +80,9 @@ $(function() {
 		$.get(chrome.extension.getURL("senderInfo.tmpl"), function(data) {
 			$.templates('senderInfoTemplate', data);
 		}, 'html'),
-		// $.get(chrome.extension.getURL("noResonse.tmpl"), function(data) {
-		// 	$.templates('noResonseTemplate', data);
-		// }, 'html'),
+		$.get(chrome.extension.getURL("bottomBar.tmpl"), function(data) {
+	 		$.templates('bottomBarTemplate', data);
+		}, 'html'),
 		$.get(chrome.extension.getURL("noSnippets.tmpl"), function(data) {
 			$.templates('noSnippetsTemplate', data);
 		}, 'html')).then(function() {
@@ -353,34 +353,50 @@ var LDEngine = {
 					log.debug( '"no response" timer fired!' );
 					LDEngine.sidebar.stopLoadingSpinner();
 					LDEngine.sidebar.appendNoResponse();
-				}, 10000);
+				}, 10000),
+				numRequest = 1, updateInterval, pollTimeout;
 
 			log.debug( 'Getting account status from: ' + API_URL + "/account/status for email string: " + emailString );
-			$.get(API_URL + "/account/status", {
-				email: emailString
-			},function(data) {
-				log.ifDebugEnabled( function() {
-					log.debug( 'Account status returned: ' + data );
-				} );
-				
-				// if server has responded then we kill the functions waiting for the timer to end
+			(function loginXHR() {
+				$.get(API_URL + "/account/status", {
+					email: emailString
+				},function(data) {
+					log.ifDebugEnabled( function() {
+						log.debug( 'Account status returned: ' + data );
+					} );
+					
+					// if server has responded then we kill the functions waiting for the timer to end
 
-				log.debug( 'Clearing no response timer.' );
-				clearTimeout(noResponse);
-				
-				LDEngine.sidebar.accountStatus = data;
-				// Render the appropriate UI depending if you have the data
-				if (LDEngine.sidebar.accountStatus.status !== 'linked') {
-					log.debug( 'Rendering Linked UI' );
-					LDEngine.sidebar.append();
-					$.link.unauthTemplate($('.lde-unauthenticated'), LDEngine.sidebar.accountStatus.AuthUrl);
-					LDEngine.sidebar.stopLoadingSpinner();
-				} else {
-					log.debug( 'Rendering default UI' );
-					LDEngine.sidebar.renderUI();
-				}
+					log.debug( 'Clearing no response timer.' );
+					clearTimeout(noResponse);
 
-			});
+					numRequest++;
+					if (numRequest > 120 ) {
+						clearInterval(updateInterval);
+					}
+					LDEngine.sidebar.accountStatus = data;
+					// Render the appropriate UI depending if you have the data
+					if (LDEngine.sidebar.accountStatus.status !== 'linked') {
+						log.debug( 'Rendering Linked UI' );
+						LDEngine.sidebar.append();
+						$.link.unauthTemplate($('.lde-unauthenticated'), LDEngine.sidebar.accountStatus.AuthUrl);
+						LDEngine.sidebar.stopLoadingSpinner();
+						$('.lde-unauth-button').click( function () {
+							updateInterval = 
+									setInterval( 
+										function() {
+											loginXHR();
+										}, 1000);
+						});
+					} 
+					else {
+						clearInterval(updateInterval);
+						log.debug( 'Rendering default UI' );
+						LDEngine.sidebar.renderUI();
+					}
+
+				});
+			})()
 		},
 
 		// set the height dynamically of the sidebar with JS. CSS will be used for the container with
@@ -397,9 +413,26 @@ var LDEngine = {
 			
 			// Draw empty sidebar
 			this.append();
-			
+			// Draw Search Box	
 			LDEngine.sidebar.senderInfo.render();
+
+			LDEngine.sidebar.appendLoadingSpinner();
 			
+			//bad behavior stopper for enter key
+			$('.lde-search-box').keypress(function(e){
+				if ( e.which == 13 ) e.preventDefault();
+			});
+			//new behaviors added
+			$('.lde-search-box').keyup(function(event) {
+				if (event.keyCode == 13) {
+					$('.lde-mag-glass').click();
+				}
+			});
+			// Bind click events to search bar and some handling to prevent enter key bad behavior
+			$('.lde-mag-glass').click(function() {
+				LDEngine.sidebar.senderInfo.searchRequest(document.getElementById('search_field').field.value);	
+			});
+
 			// If your'e not logged in:
 			// TODO: If you're logged in, do all this:
 			// Draw loading spinner
@@ -412,14 +445,13 @@ var LDEngine = {
 			Gmail.message.scrape($el, function(err, messageApiObj) {
 			
 			// Send the scrapped message to the server
-					
 					//make up the thread ID
 					var currentUrl = document.location.href;
-					var threadId;
+					//var threadId;
 					var threadArray = currentUrl.match(/[^\x2f]*$/i);
-					threadId = parseInt(threadArray, 16);
+					//threadId = parseInt(threadArray, 16);
 					
-					messageApiObj.Message.thrid = threadId;
+					messageApiObj.Message.thrid = threadArray.join();
 						
 						Gmail.message.post(messageApiObj, function(messageSnippets, textStatus) { 
 							
@@ -428,14 +460,14 @@ var LDEngine = {
 
 
 							// If no snippets are returned, render the noSnippets view and stop the ajax spinner.
-						/*	if (messageSnippets.length === 0) {
+							if (messageSnippets.length === 0) {
 									$.link.noSnippetsTemplate('.lde-noSnippets');
 									LDEngine.sidebar.stopLoadingSpinner();
-									return;
-							}*/
+									
+							}
 							_.map(messageSnippets, function(messageSnippet) {
 								if( messageSnippet.from && !messageSnippet.from.name )  {messageSnippet.from.name = messageSnippet.from.email;} 
-								
+								if( messageSnippet.from.name.length > 20 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,18) + '...'; }	
 								return _.extend(messageSnippet, {
 									date: messageSnippet.date && new Date(messageSnippet.date).toString('MMM d yy'),
 									from: _.extend(messageSnippet.from, {
@@ -450,27 +482,11 @@ var LDEngine = {
 							log.debug( 'Stop the loading spinner.' );
 							LDEngine.sidebar.stopLoadingSpinner();
 
-							// render the sender info
-							log.debug( 'Render senderInfo' );
-						
 							// Render the message snippets returned from the server
 							log.debug( 'Render message snippets' );
 							LDEngine.sidebar.renderSnippets(messageSnippets);
 						
-							// Bind click events to search bar and some handling to prevent enter key bad behavior
-							$('.lde-mag-glass').click(function() {
-								LDEngine.sidebar.senderInfo.searchRequest(document.getElementById('search_field').field.value);	
-							});
-							//bad behavior stopper for enter key
-							$('.lde-search-box').keypress(function(e){ 
-								if ( e.which == 13 ) e.preventDefault();
-							});
-							//new behaviors added
-							$('.lde-search-box').keyup(function(event) {
-								if (event.keyCode == 13) {
-									$('.lde-mag-glass').click();
-								}
-							});
+
 
 							// fixed to prevent Google from capturing out scroll event
 							$('.lde-related-emails').bind('mousewheel', function(e, delta) {
@@ -525,6 +541,8 @@ var LDEngine = {
 
 			// No data, just a cheap way to render the html template
 			$.link.ldengineTemplate('#ldengine');
+			$('#accordion').hide();
+			$('.lde-bottom-bar').hide();
 		},
 
 		// Append loading spinner to sidebar, right now the process of checking login
@@ -564,25 +582,30 @@ var LDEngine = {
 				case 'FacebookStatusMessage':
 				case 'Facebook':
 					var facebookURL = chrome.extension.getURL('facebook.png');
-					messageSnippets[each].appIcon = '<img width=20 height=20 src=\"' + facebookURL + '\">';
+					messageSnippets[each].appIcon = '<img width=15 height=15 src=\"' + facebookURL + '\">';
 					break;
 				case 'Tweet':
 					var twitterURL = chrome.extension.getURL('Twitter.png');
-					messageSnippets[each].appIcon = '<img width-20 height=20 src=\"' + twitterURL + '\">';
+					messageSnippets[each].appIcon = '<img width-15 height=15 src=\"' + twitterURL + '\">';
 					break;
 				case 'email':
 					var gmailURL = chrome.extension.getURL('gmail.png');
-					messageSnippets[each].appIcon = '<img width=20 height=20 src=\"' + gmailURL + '\">';
+					messageSnippets[each].appIcon = '<img width=15 height=15 src=\"' + gmailURL + '\">';
 					break;
 				default:
 				}
 
 			}
-
-			
-
-			// Add the related emails to the sidebar
+		
+			// Add the related emails to the sidebar, do rendering of the middle parts
+			////////////////////////////////////////////	
+			$('#accordion').show();
+			$('.msg-header').append("<span class=\"msg-header-count\">" + messageSnippets.length + "</span>" );
+			$('.lde-bottom-bar').show();
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
+			$("#accordion").accordion({ animate: 500,collapsible: true, active: false } );
+			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
+			
 
 			if (!$('.lde-related-emails').length) {
 				LDEngine.sidebar.append();
@@ -595,6 +618,8 @@ var LDEngine = {
 
 			// Ellipsize the related email snippets
 			$('.lde-email-result').dotdotdot();
+			console.log(" Dot dot dot results");
+			console.log($('.lde-sender').dotdotdot());
 
 			// Bind click events to message snippets
 			for(var i = 0; i < messageSnippets.length; i++) {
@@ -656,12 +681,16 @@ var LDEngine = {
 				LDEngine.sidebar.stopLoadingSpinner();
 
 					if (searchSnippets.length === 0) {
+						/*
 							messageNull = { 
 								from : { name : null },
 								cssFlag: 1,
 								snippet : "Nothing related was found, try again?" };
 							LDEngine.sidebar.renderSnippets(messageNull);
-							return;
+							return;*/
+
+						$.link.noSnippetsTemplate('.lde-noSnippets');
+						LDEngine.sidebar.stopLoadingSpinner();
 					};
 
 
@@ -848,7 +877,7 @@ var LDEngine = {
 				// Retemplate
 				$.link.popupTemplate($('#lde-popup'), LDEngine.popup.model);
 				// Hide the loading spinner and display inner content
-				$('.lde-ajax-spinner').hide();
+				$('.lde-ajax-popup').hide();
 				$('.lde-popup-content').show();
 			}
 			// Hook up the close button
@@ -887,10 +916,11 @@ var LDEngine = {
 _.bindAll(LDEngine.sidebar);
 
 // Watch for resize events and hide or show the sidebar accordingly
+/*
 $(function () {
 	$(window).bind('resize',_.throttle(function () {
 		if ($(window).width() < 1140) LDEngine.sidebar.hide(150);
 		else LDEngine.sidebar.show(250);
 	},25));
 });
-
+*/
