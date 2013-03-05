@@ -1,6 +1,6 @@
 {
   "name": "LD Engine",
-  "version": "13.3.4",
+  "version": "13.3.5",
   "description": "Imagine a world where you didn't hate your email.",
   "permissions": [
   ],
@@ -17,12 +17,10 @@
     }
   ],
   "permissions": [
-    "http://apps.ldengine.com/",
-    "https://apps.ldengine.com/",
-    "http://preview.engine.co/",
-    "https://preview.engine.co/",
     "http://apps.engine.co/",
     "https://apps.engine.co/",
+    "http://preview.engine.co/",
+    "https://preview.engine.co/",
     "http://127.0.0.1:3000/",
     "storage"
   ],

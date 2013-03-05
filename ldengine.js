@@ -375,6 +375,7 @@ var LDEngine = {
 						clearInterval(updateInterval);
 					}
 					LDEngine.sidebar.accountStatus = data;
+					console.log(LDEngine.sidebar.accountStatus);
 					// Render the appropriate UI depending if you have the data
 					if (LDEngine.sidebar.accountStatus.status !== 'linked') {
 						log.debug( 'Rendering Linked UI' );
@@ -461,13 +462,15 @@ var LDEngine = {
 
 							// If no snippets are returned, render the noSnippets view and stop the ajax spinner.
 							if (messageSnippets.length === 0) {
-									$.link.noSnippetsTemplate('.lde-noSnippets');
+									$('.lde-search-info').css('font-size', '80%');
+									$('.lde-search-info').text('No related messages were found.');
 									LDEngine.sidebar.stopLoadingSpinner();
 									
 							}
 							_.map(messageSnippets, function(messageSnippet) {
 								if( messageSnippet.from && !messageSnippet.from.name )  {messageSnippet.from.name = messageSnippet.from.email;} 
-								if( messageSnippet.from.name.length > 20 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,18) + '...'; }	
+								if( messageSnippet.from.name.length > 22 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,20) + '...'; }
+								if( messageSnippet.title.length > 32 ) { messageSnippet.title = messageSnippet.title.substr(0,29) + '...'; }
 								return _.extend(messageSnippet, {
 									date: messageSnippet.date && new Date(messageSnippet.date).toString('MMM d yy'),
 									from: _.extend(messageSnippet.from, {
@@ -572,7 +575,8 @@ var LDEngine = {
 
 		renderSnippets: function(messageSnippets) {
 			log.debug( 'LDEngine.sidebar.renderSnippets()' );
-
+			var msgArrow = 1; 
+			
 			// Remove any Gmail stuff that's popped up
 			$(Gmail.selectors.sidebar).find(Gmail.selectors.userbar).remove();
 			
@@ -600,12 +604,29 @@ var LDEngine = {
 			// Add the related emails to the sidebar, do rendering of the middle parts
 			////////////////////////////////////////////	
 			$('#accordion').show();
-			$('.msg-header').append("<span class=\"msg-header-count\">" + messageSnippets.length + "</span>" );
+			$('.msg-header-count').text(messageSnippets.length);
+			$('.msg-header-arrow').text('>');
+			
 			$('.lde-bottom-bar').show();
+			console.log("message snippets");
+			console.log(messageSnippets);
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
-			$("#accordion").accordion({ animate: 500,collapsible: true, active: false } );
+			$("#accordion").accordion({ animate: 900,collapsible: true, active: 0 } );
 			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
 			
+
+			$('.msg-header').click( function () {
+				if( msgArrow == 0) {
+					$('.msg-header-arrow').text(">");
+					msgArrow = 1;
+				}
+				else {
+					$('.msg-header-arrow').html("&darr;");
+					msgArrow = 0;
+				}
+			});
+
+
 
 			if (!$('.lde-related-emails').length) {
 				LDEngine.sidebar.append();
@@ -618,8 +639,6 @@ var LDEngine = {
 
 			// Ellipsize the related email snippets
 			$('.lde-email-result').dotdotdot();
-			console.log(" Dot dot dot results");
-			console.log($('.lde-sender').dotdotdot());
 
 			// Bind click events to message snippets
 			for(var i = 0; i < messageSnippets.length; i++) {
@@ -696,9 +715,9 @@ var LDEngine = {
 
 					//Perform operations on Snippets
 					_.map(searchSnippets, function(searchSnippet) {
-							if( !searchSnippet.from.name )	searchSnippet.from.name = searchSnippet.from.email;
-							else 
-						    {}	
+							if( searchSnippet.from && !searchSnippet.from.name )  { searchSnippet.from.name = searchSnippet.from.email;} 
+							if( searchSnippet.from.name.length > 22 ) { searchSnippet.from.name = searchSnippet.from.name.substr(0,20) + '...'; }
+							if( searchSnippet.title.length > 32 ) { searchSnippet.title = searchSnippet.title.substr(0,29) + '...'; }
 						return _.extend(searchSnippet, {
 							date: searchSnippet.date && new Date(searchSnippet.date).toString('MMM d yy'),
 							from: _.extend(searchSnippet.from, {

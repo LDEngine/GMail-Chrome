@@ -27,13 +27,14 @@
 }
 
 .lde-logo-container {
-	background-color: #EEEEEE;
+	background-color: #FFFFFF;
 	display: block;	
 	width: 92%;
 	height: 100%;
 	height: 40px;
 	background-size: 100%;
 	border: 1px solid #222;
+	border-bottom: 0px;
 }
 
 
@@ -47,10 +48,6 @@
 }
 .lde-email-result:hover {
 	background: #DEDEDE;
-}
-.lde-middle-padding {
-	height: 3px;
-	background-color: white;
 }
 .active-snippet {
 	background-color: #f4f8e7;
@@ -67,7 +64,8 @@
  * email result.
  */
 .lde-header {
-	overflow: auto;	
+	margin-top: 2px;
+	overflow: auto;
 }
 
 /**
@@ -96,8 +94,11 @@
  *	Search styles
  */ 
 .lde-search {
-	background-color: #EEEEEE;
+	font-family: sans-serif;
+	background-color: #D3E8C7;
 	border: 1px solid #222;
+	border-top: 0px;
+	border-bottom: 0px;
 	height: 60px;
 	width: 92%;	
 }
@@ -165,7 +166,7 @@ input[type="text"] {
 }
 
 .lde-search-info {
-	background-color: #EEEEEE;
+	background-color: #FFFFFF;
 	color: #333;
 	text-align: center;
 	padding-top: 10px;
@@ -174,23 +175,22 @@ input[type="text"] {
 	font-size: 15px;
 	font-weight: bold;
 	height: 20px;
-}
-
-.lde-top-padding {
-	height: 3px;
-	background-color: white;
+	width: 92%;
+	border-right: 1px solid #222;
+	border-left: 1px solid #222;
 }
 
 /**
  * Text contained within the email body.
  */
 .lde-title {
-	font-size: 50%;
+	margin-top: -5px;
+	font-size: 75%;
 	font-weight: bold;
 }
 .lde-text {
-	margin-top: -10px;
-	font-size: 50%;
+	margin-top: -11px;
+	font-size: 75%;
 	word-break: hyphenate;
 }
 
@@ -303,7 +303,7 @@ input[type="text"] {
 	right:285px;
 	top: 100px;
 
-	background-color: #EEEEEE;
+	background-color: #D3E8C7;
 }
 
 .lde-popup-subject {
@@ -537,14 +537,26 @@ input[type="text"] {
   margin-top: 6px;
 }
 
+.msg-header {
+	font-family: sans-serif;
+}
+
+
 .msg-header-count {
+	position: relative;
 	font-size: 70%;
 	border-radius: 6px;
+	background-color: #F3F07D;
 	border: 1px solid #222;
-	padding: .1em;
-	top: 15px;
+	padding: .1em .1em .1em;
+	margin: .1em;
+	left: 45px;
+	bottom: 2px;
+}
+
+.msg-header-arrow {
 	float: right;
-	margin-right: 5px;
+	margin-right: 11px;
 }
 
 /**
@@ -554,17 +566,13 @@ input[type="text"] {
 	height: auto;
 	overflow: auto;
 }
-.lde-bottom-padding {
-	background-color: white;
-	height: 5px;
-}
-
 
 .lde-bottom-bar {
-	background-color: #EEEEEE;
+	font-family: sans-serif;
+	background-color: #FFFFFF;
 	text-align: center;
 	height:30px;
-	width: 93%;
+	width: 14em;
 	padding-right: 15px;
 	margin-bottom: 7px;
 }
