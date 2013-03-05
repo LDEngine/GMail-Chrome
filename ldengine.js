@@ -470,7 +470,7 @@ var LDEngine = {
 							_.map(messageSnippets, function(messageSnippet) {
 								if( messageSnippet.from && !messageSnippet.from.name )  {messageSnippet.from.name = messageSnippet.from.email;} 
 								if( messageSnippet.from.name.length > 22 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,20) + '...'; }
-								if( messageSnippet.title.length > 32 ) { messageSnippet.title = messageSnippet.title.substr(0,29) + '...'; }
+								if( messageSnippet.title && messageSnippet.title.length > 32 ) { messageSnippet.title = messageSnippet.title.substr(0,29) + '...'; }
 								return _.extend(messageSnippet, {
 									date: messageSnippet.date && new Date(messageSnippet.date).toString('MMM d yy'),
 									from: _.extend(messageSnippet.from, {
@@ -717,7 +717,7 @@ var LDEngine = {
 					_.map(searchSnippets, function(searchSnippet) {
 							if( searchSnippet.from && !searchSnippet.from.name )  { searchSnippet.from.name = searchSnippet.from.email;} 
 							if( searchSnippet.from.name.length > 22 ) { searchSnippet.from.name = searchSnippet.from.name.substr(0,20) + '...'; }
-							if( searchSnippet.title.length > 32 ) { searchSnippet.title = searchSnippet.title.substr(0,29) + '...'; }
+							if( searchSnippet.title && searchSnippet.title.length > 32 ) { searchSnippet.title = searchSnippet.title.substr(0,29) + '...'; }
 						return _.extend(searchSnippet, {
 							date: searchSnippet.date && new Date(searchSnippet.date).toString('MMM d yy'),
 							from: _.extend(searchSnippet.from, {
