@@ -575,7 +575,7 @@ var LDEngine = {
 
 		renderSnippets: function(messageSnippets) {
 			log.debug( 'LDEngine.sidebar.renderSnippets()' );
-			var msgArrow = 0; 
+			var msgArrow = 1; 
 			
 			// Remove any Gmail stuff that's popped up
 			$(Gmail.selectors.sidebar).find(Gmail.selectors.userbar).remove();
