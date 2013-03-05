@@ -469,8 +469,8 @@ var LDEngine = {
 							}
 							_.map(messageSnippets, function(messageSnippet) {
 								if( messageSnippet.from && !messageSnippet.from.name )  {messageSnippet.from.name = messageSnippet.from.email;} 
-								if( messageSnippet.from.name.length > 20 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,18) + '...'; }
-								if( messageSnippet.title.length > 28 ) { messageSnippet.title = messageSnippet.title.substr(0,25) + '...'; }
+								if( messageSnippet.from.name.length > 22 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,20) + '...'; }
+								if( messageSnippet.title.length > 36 ) { messageSnippet.title = messageSnippet.title.substr(0,33) + '...'; }
 								return _.extend(messageSnippet, {
 									date: messageSnippet.date && new Date(messageSnippet.date).toString('MMM d yy'),
 									from: _.extend(messageSnippet.from, {
@@ -716,8 +716,8 @@ var LDEngine = {
 					//Perform operations on Snippets
 					_.map(searchSnippets, function(searchSnippet) {
 							if( searchSnippet.from && !searchSnippet.from.name )  { searchSnippet.from.name = searchSnippet.from.email;} 
-							if( searchSnippet.from.name.length > 20 ) { searchSnippet.from.name = searchSnippet.from.name.substr(0,18) + '...'; }
-							if( searchSnippet.title.length > 28 ) { searchSnippet.title = searchSnippet.title.substr(0,25) + '...'; }
+							if( searchSnippet.from.name.length > 22 ) { searchSnippet.from.name = searchSnippet.from.name.substr(0,20) + '...'; }
+							if( searchSnippet.title.length > 36 ) { searchSnippet.title = searchSnippet.title.substr(0,33) + '...'; }
 						return _.extend(searchSnippet, {
 							date: searchSnippet.date && new Date(searchSnippet.date).toString('MMM d yy'),
 							from: _.extend(searchSnippet.from, {
