@@ -575,7 +575,7 @@ var LDEngine = {
 
 		renderSnippets: function(messageSnippets) {
 			log.debug( 'LDEngine.sidebar.renderSnippets()' );
-			var msgArrow = 1; 
+
 			
 			// Remove any Gmail stuff that's popped up
 			$(Gmail.selectors.sidebar).find(Gmail.selectors.userbar).remove();
@@ -606,7 +606,10 @@ var LDEngine = {
 			$('#accordion').show();
 			$('.msg-header-count').text(messageSnippets.length);
 			$('.msg-header-arrow').text('>');
-			
+
+			$('.msg-header-arrow').html("&darr;");
+			var msgArrow = 1; 
+
 			$('.lde-bottom-bar').show();
 			console.log("message snippets");
 			console.log(messageSnippets);
@@ -614,15 +617,19 @@ var LDEngine = {
 			$("#accordion").accordion({ animate: 900,collapsible: true, active: 0 } );
 			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
 			
-
+			// Add
 			$('.msg-header').click( function () {
-				if( msgArrow == 0) {
+				//Open arrow = 1
+				//Closed arrow = 0
+				//If closed(0) then open it
+				//If open(1) then close it
+				if( msgArrow == 1) {
 					$('.msg-header-arrow').text(">");
-					msgArrow = 1;
+					msgArrow = 0;
 				}
 				else {
 					$('.msg-header-arrow').html("&darr;");
-					msgArrow = 0;
+					msgArrow = 1;
 				}
 			});
 
