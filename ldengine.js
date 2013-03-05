@@ -52,7 +52,7 @@ $(function() {
 		chrome.storage.local.get('ldengine_api_url', function(items) {
 
 			// If there's nothing in there, default to the default production version.
-			API_URL = items.ldengine_api_url || "https://apps.ldengine.com";
+			API_URL = items.ldengine_api_url || "https://apps.engine.co";
 
 			// If there's no protocol specified, use https by default.
 			if( API_URL.indexOf( "http" ) < 0 )
@@ -375,6 +375,7 @@ var LDEngine = {
 						clearInterval(updateInterval);
 					}
 					LDEngine.sidebar.accountStatus = data;
+					console.log(LDEngine.sidebar.accountStatus);
 					// Render the appropriate UI depending if you have the data
 					if (LDEngine.sidebar.accountStatus.status !== 'linked') {
 						log.debug( 'Rendering Linked UI' );
@@ -461,7 +462,8 @@ var LDEngine = {
 
 							// If no snippets are returned, render the noSnippets view and stop the ajax spinner.
 							if (messageSnippets.length === 0) {
-									$.link.noSnippetsTemplate('.lde-noSnippets');
+									$('.lde-search-info').css('font-size', '80%');
+									$('.lde-search-info').text('No related messages were found.');
 									LDEngine.sidebar.stopLoadingSpinner();
 									
 							}
@@ -573,7 +575,8 @@ var LDEngine = {
 
 		renderSnippets: function(messageSnippets) {
 			log.debug( 'LDEngine.sidebar.renderSnippets()' );
-
+			var msgArrow = 0; 
+			
 			// Remove any Gmail stuff that's popped up
 			$(Gmail.selectors.sidebar).find(Gmail.selectors.userbar).remove();
 			
@@ -601,12 +604,28 @@ var LDEngine = {
 			// Add the related emails to the sidebar, do rendering of the middle parts
 			////////////////////////////////////////////	
 			$('#accordion').show();
-			$('.msg-header').append("<span class=\"msg-header-count\">" + messageSnippets.length + "</span><span class=\"msg-header-arrow\">></span>" );
+			$('.msg-header-count').text(messageSnippets.length);
+			$('.msg-header-arrow').text('>');
+			
 			$('.lde-bottom-bar').show();
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
-			$("#accordion").accordion({ animate: 900,collapsible: true, active: 1 } );
+			$("#accordion").accordion({ animate: 900,collapsible: true, active: 0 } );
 			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
 			
+
+			$('.msg-header').click( function () {
+				
+				if( msgArrow == 0) {
+					$('.msg-header-arrow').html("&darr;");
+					msgArrow = 1;
+				}
+				else {
+					$('.msg-header-arrow').text(">");
+					msgArrow = 0;
+				}
+			});
+
+
 
 			if (!$('.lde-related-emails').length) {
 				LDEngine.sidebar.append();
@@ -697,9 +716,9 @@ var LDEngine = {
 
 					//Perform operations on Snippets
 					_.map(searchSnippets, function(searchSnippet) {
-							if( !searchSnippet.from.name )	searchSnippet.from.name = searchSnippet.from.email;
-							else 
-						    {}	
+							if( messageSnippet.from && !messageSnippet.from.name )  {messageSnippet.from.name = messageSnippet.from.email;} 
+							if( messageSnippet.from.name.length > 20 ) { messageSnippet.from.name = messageSnippet.from.name.substr(0,18) + '...'; }
+							if( messageSnippet.title.length > 28 ) { messageSnippet.title = messageSnippet.title.substr(0,25) + '...'; }
 						return _.extend(searchSnippet, {
 							date: searchSnippet.date && new Date(searchSnippet.date).toString('MMM d yy'),
 							from: _.extend(searchSnippet.from, {
