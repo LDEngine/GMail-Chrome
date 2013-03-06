@@ -912,7 +912,7 @@ var LDEngine = {
 				// Hide the loading spinner and display inner content
 				$('.lde-ajax-popup-spinner').hide();
 				
-				//$('#lde-popup').resizable({alsoResize: ".lde-popup-msg-text"  });
+				$('#lde-popup').resizable({alsoResize: ".lde-popup-msg-text"  });
 				$('.lde-popup-content').show();
 			}
 			$('#lde-popup').draggable({ handle: ".lde-popup-draggable" });

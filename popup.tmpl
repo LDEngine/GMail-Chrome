@@ -3,17 +3,19 @@
 <div class='lde-ajax-popup-spinner'></div>
 <div class='lde-popup-close-button'></div>
 <div class='lde-popup-content'>
-	<div class='lde-popup-msg-header'>
-		<div class='lde-popup-subject'>{{>subject}}</div>
-		<div class='lde-popup-sender-email'>From: </div>
-		<div class='lde-popup-sender-name'>{{>from_name}}</div>
-		<div class='lde-popup-sender-email'>{{>from_email}}</div>
-		<div class='lde-popup-date'>{{>date}}</div></br>
-		<div class='lde-popup-recieved-email'>To: </div>
-		<div class='lde-popup-recieved-name'>{{>first_recipient_name}}</div>
-		<div class='lde-popup-recieved-email'>{{>first_recipient_email}}</div>
-		 {{:restof_recipients}} 
-	</div>
+
+		<div class='lde-popup-msg-header'>
+
+			<div class='lde-popup-subject'>{{>subject}}</div>
+			<div class='lde-popup-sender-email'>From: </div>
+			<div class='lde-popup-sender-name'>{{>from_name}}</div>
+			<div class='lde-popup-sender-email'>{{>from_email}}</div>
+			<div class='lde-popup-date'>{{>date}}</div></br>
+			<div class='lde-popup-recieved-email'>To: </div>
+			<div class='lde-popup-recieved-name'>{{>first_recipient_name}}</div>
+			<div class='lde-popup-recieved-email'>{{>first_recipient_email}}</div>
+			{{:restof_recipients}} 
+		</div>
 </div>
 	<div class='lde-popup-msg-text'>{{:body}}</div>
 	<span class="lde-popup-draggable"></span>
