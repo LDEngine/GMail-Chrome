@@ -755,6 +755,9 @@ var LDEngine = {
 		fetch: function(id) {
 			log.debug( 'LDEngine.sidebar.popup.fetch()' );
 			// Display empty popup, clear model, and abort pending xhr request if necessary
+			
+
+			
 			LDEngine.popup.model = null; 
 			LDEngine.popup.display();
 			if(LDEngine.popup.xhr) {
@@ -771,6 +774,7 @@ var LDEngine = {
 				LDEngine.popup.typeOfMessage(model);
 				
 				LDEngine.popup.model = model;
+				
 				LDEngine.popup.display();
 			});
 		},
@@ -883,13 +887,14 @@ var LDEngine = {
 			log.debug( 'LDEngine.sidebar.popup.display()' );
 			// Draw the veil.
 			LDEngine.popup.maskMessageArea(true);
-			
+
 			// Render the popup content
 			if(!LDEngine.popup.model) {
 				// Attach the popup container if necessary
 				if(! $('#lde-popup').length) {
 					var popupEl = $('<div id="lde-popup"></div>');
 					$('.adC').parent().append(popupEl);
+
 				}
 
 				// Show the loading spinner and hide inner content
@@ -898,14 +903,20 @@ var LDEngine = {
 							from: { name: "loading popup..." }
 						}
 				});
+				
 				$('.lde-popup-content').hide();
 			} else {
 				// Retemplate
 				$.link.popupTemplate($('#lde-popup'), LDEngine.popup.model);
+
 				// Hide the loading spinner and display inner content
-				$('.lde-ajax-popup').hide();
+				$('.lde-ajax-popup-spinner').hide();
+				
+				//$('#lde-popup').resizable({alsoResize: ".lde-popup-msg-text"  });
 				$('.lde-popup-content').show();
 			}
+			$('#lde-popup').draggable({ handle: ".lde-popup-draggable" });
+
 			// Hook up the close button
 			$('.lde-popup-close-button').click(LDEngine.popup.close);
 		},
