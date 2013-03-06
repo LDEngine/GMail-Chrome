@@ -575,7 +575,7 @@ var LDEngine = {
 
 		renderSnippets: function(messageSnippets) {
 			log.debug( 'LDEngine.sidebar.renderSnippets()' );
-			var msgArrow = 1; 
+
 			
 			// Remove any Gmail stuff that's popped up
 			$(Gmail.selectors.sidebar).find(Gmail.selectors.userbar).remove();
@@ -606,23 +606,27 @@ var LDEngine = {
 			$('#accordion').show();
 			$('.msg-header-count').text(messageSnippets.length);
 			$('.msg-header-arrow').text('>');
-			
+
+			$('.msg-header-arrow').html("&darr;");
+			var msgArrow = 1; 
+
 			$('.lde-bottom-bar').show();
-			console.log("message snippets");
-			console.log(messageSnippets);
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
 			$("#accordion").accordion({ animate: 900,collapsible: true, active: 0 } );
 			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
 			
-
 			$('.msg-header').click( function () {
-				if( msgArrow == 0) {
+				//Open arrow = 1
+				//Closed arrow = 0
+				//If closed(0) then open it
+				//If open(1) then close it
+				if( msgArrow == 1) {
 					$('.msg-header-arrow').text(">");
-					msgArrow = 1;
+					msgArrow = 0;
 				}
 				else {
 					$('.msg-header-arrow').html("&darr;");
-					msgArrow = 0;
+					msgArrow = 1;
 				}
 			});
 
@@ -748,6 +752,9 @@ var LDEngine = {
 		fetch: function(id) {
 			log.debug( 'LDEngine.sidebar.popup.fetch()' );
 			// Display empty popup, clear model, and abort pending xhr request if necessary
+			
+
+			
 			LDEngine.popup.model = null; 
 			LDEngine.popup.display();
 			if(LDEngine.popup.xhr) {
@@ -764,6 +771,7 @@ var LDEngine = {
 				LDEngine.popup.typeOfMessage(model);
 				
 				LDEngine.popup.model = model;
+				
 				LDEngine.popup.display();
 			});
 		},
@@ -873,15 +881,27 @@ var LDEngine = {
 		},
 		// Display the popup
 		display: function() {
+
 			log.debug( 'LDEngine.sidebar.popup.display()' );
 			// Draw the veil.
 			LDEngine.popup.maskMessageArea(true);
-			
+
+			//1 means on
+			//0 means off
+			if(LDEngine.popup.isPopupResizedOn == 1) {
+				
+				$('#lde-popup').resizable("destroy");
+				$('#lde-popup').css('width', '600px');
+				$('#lde-popup').css('height', '350px');
+				
+				LDEngine.popup.isPopupResizedOn = 0;
+				//console.log("destroyed" + LDEngine.popup.isPopupResizedOn);
+			}
 			// Render the popup content
 			if(!LDEngine.popup.model) {
 				// Attach the popup container if necessary
 				if(! $('#lde-popup').length) {
-					var popupEl = $('<div id="lde-popup"></div>');
+					var popupEl = $('<div id="lde-popup" style="left: -754px; top: 100px"></div>');
 					$('.adC').parent().append(popupEl);
 				}
 
@@ -891,23 +911,43 @@ var LDEngine = {
 							from: { name: "loading popup..." }
 						}
 				});
+				
 				$('.lde-popup-content').hide();
 			} else {
 				// Retemplate
 				$.link.popupTemplate($('#lde-popup'), LDEngine.popup.model);
+
 				// Hide the loading spinner and display inner content
-				$('.lde-ajax-popup').hide();
+				$('.lde-ajax-popup-spinner').hide();
+
+				$('#lde-popup').resizable({ alsoResize:  '.lde-popup-msg-header,' +
+														 '.lde-popup-msg-text,' +
+														 '.lde-popup-content',
+											handles : 'all',
+											maxHeight: 400,
+											minHeight: 300,
+											minWidth: 500,
+											create: function(event,ui) {
+												LDEngine.popup.isPopupResizedOn = 1;			
+												//console.log("created" + LDEngine.popup.isPopupResizedOn);
+											}
+				});
+
 				$('.lde-popup-content').show();
 			}
+			$('#lde-popup').draggable({ handle: ".lde-popup-draggable", containment: "#lde-msg-mask" });
+
 			// Hook up the close button
 			$('.lde-popup-close-button').click(LDEngine.popup.close);
 		},
+		isPopupResizedOn: 0,
 
 		// Close the popup and hide the veil
 		close: function() {
 			log.debug( 'LDEngine.sidebar.popup.close()' );
 
 			$('#lde-popup').detach();
+			
 
 			// Kill the mask.
 			LDEngine.popup.maskMessageArea(false);
