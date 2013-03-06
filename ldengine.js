@@ -611,13 +611,10 @@ var LDEngine = {
 			var msgArrow = 1; 
 
 			$('.lde-bottom-bar').show();
-			console.log("message snippets");
-			console.log(messageSnippets);
 			$.link.sidebarTemplate(".lde-related-emails", messageSnippets);
 			$("#accordion").accordion({ animate: 900,collapsible: true, active: 0 } );
 			$.link.bottomBarTemplate(".lde-bottom-bar", {} );
 			
-			// Add
 			$('.msg-header').click( function () {
 				//Open arrow = 1
 				//Closed arrow = 0
@@ -884,17 +881,28 @@ var LDEngine = {
 		},
 		// Display the popup
 		display: function() {
+
 			log.debug( 'LDEngine.sidebar.popup.display()' );
 			// Draw the veil.
 			LDEngine.popup.maskMessageArea(true);
 
+			//1 means on
+			//0 means off
+			if(LDEngine.popup.isPopupResizedOn == 1) {
+				
+				$('#lde-popup').resizable("destroy");
+				$('#lde-popup').css('width', '600px');
+				$('#lde-popup').css('height', '350px');
+				
+				LDEngine.popup.isPopupResizedOn = 0;
+				//console.log("destroyed" + LDEngine.popup.isPopupResizedOn);
+			}
 			// Render the popup content
 			if(!LDEngine.popup.model) {
 				// Attach the popup container if necessary
 				if(! $('#lde-popup').length) {
-					var popupEl = $('<div id="lde-popup"></div>');
+					var popupEl = $('<div id="lde-popup" style="left: -754px; top: 100px"></div>');
 					$('.adC').parent().append(popupEl);
-
 				}
 
 				// Show the loading spinner and hide inner content
@@ -911,21 +919,35 @@ var LDEngine = {
 
 				// Hide the loading spinner and display inner content
 				$('.lde-ajax-popup-spinner').hide();
-				
-				$('#lde-popup').resizable({alsoResize: ".lde-popup-msg-text"  });
+
+				$('#lde-popup').resizable({ alsoResize:  '.lde-popup-msg-header,' +
+														 '.lde-popup-msg-text,' +
+														 '.lde-popup-content',
+											handles : 'all',
+											maxHeight: 400,
+											minHeight: 300,
+											minWidth: 500,
+											create: function(event,ui) {
+												LDEngine.popup.isPopupResizedOn = 1;			
+												//console.log("created" + LDEngine.popup.isPopupResizedOn);
+											}
+				});
+
 				$('.lde-popup-content').show();
 			}
-			$('#lde-popup').draggable({ handle: ".lde-popup-draggable" });
+			$('#lde-popup').draggable({ handle: ".lde-popup-draggable", containment: "#lde-msg-mask" });
 
 			// Hook up the close button
 			$('.lde-popup-close-button').click(LDEngine.popup.close);
 		},
+		isPopupResizedOn: 0,
 
 		// Close the popup and hide the veil
 		close: function() {
 			log.debug( 'LDEngine.sidebar.popup.close()' );
 
 			$('#lde-popup').detach();
+			
 
 			// Kill the mask.
 			LDEngine.popup.maskMessageArea(false);
