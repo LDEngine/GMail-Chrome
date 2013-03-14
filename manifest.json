@@ -9,28 +9,23 @@
     "48" : "sample-48.png",
     "128" : "sample-128.png"
   },
-/*  "content_scripts": [
+  "content_scripts": [
     {
-      "matches": [ "*://mail.google.com/*"],
-      "js" : ["async.min.js","jquery-1.8.2.min.js","underscore-min.js","date.js","jquery.dotdotdot-1.5.1.js","jsrender.js","jquery.views.js","jquery.observable.js","ldengine.js", "moment.min.js", "jquery-ui-1.10.1.custom.min.js"]
-      /*"css" : [
-        "http://127.0.0.1:3000/GMail-Chrome/hint.min.css", 
-        "http://127.0.0.1:3000/GMail-Chrome/jquery-ui-1.10.1.custom.css"
+      "matches": [ "*://mail.google.com/*" ],
+      "js": [ 
+        "jquery-1.8.2.min.js",
+        "async.min.js",
+        "ldengine.js" 
       ]
     }
-  ],*/
-  "background": {
-    "scripts": ["jquery-1.8.2.min.js","ldengine.js"],
-    "persistent": false
-  },
+  ],
   "permissions": [
     "http://apps.engine.co/",
     "https://apps.engine.co/",
     "http://preview.engine.co/",
     "https://preview.engine.co/",
-    "http://127.0.0.1:3000/",
-    "storage",
-    "tabs"
+    "https://127.0.0.1:3000/",
+    "storage"
   ],
   "web_accessible_resources": [
   	"logo_engine_dark.png"
