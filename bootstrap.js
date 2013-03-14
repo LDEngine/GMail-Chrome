@@ -17,11 +17,22 @@ $(function() {
 
 				injects.css.forEach( function( item ) {
 
-					var link = document.createElement("link");
-					link.href = API_URL + '/GMail-Chrome/' + item ;
-					link.type = "text/css";
-					link.rel = "stylesheet";
-					document.getElementsByTagName("head")[0].appendChild(link);
+					$.get( API_URL + '/GMail-Chrome/' + item, null, 
+							function( original, textStatus, jqXHR ) {
+
+								var data = original.replace( /@@API_URL/g, API_URL + '/GMail-Chrome' );
+
+								var style = document.createElement("style");
+								style.type = "text/css";
+								style.innerHTML = data;
+								document.getElementsByTagName("head")[0].appendChild( style );
+
+								console.log( data );
+							} 
+						).fail( function() {
+							alert( 'Could not load Engine extension code from ' + API_URL + '/GMail-Chrome/' + item );
+							done();
+						});
 
 				});
 
