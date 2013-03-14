@@ -27,11 +27,10 @@ $(function() {
 								style.innerHTML = data;
 								document.getElementsByTagName("head")[0].appendChild( style );
 
-								console.log( data );
+								console.log( 'CSS Loaded from: ' + item );
 							} 
 						).fail( function() {
-							alert( 'Could not load Engine extension code from ' + API_URL + '/GMail-Chrome/' + item );
-							done();
+							alert( 'Could not load CSS from ' + API_URL + '/GMail-Chrome/' + item );
 						});
 
 				});
@@ -54,7 +53,7 @@ $(function() {
 				);
 		
 			}).fail( function() {
-				alert( 'Could not load CSS list from ' + API_URL );
+				alert( 'Could not load Inject list from ' + API_URL );
 			});
 
 
