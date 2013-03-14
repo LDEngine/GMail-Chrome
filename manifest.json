@@ -1,6 +1,6 @@
 {
   "name": "Engine",
-  "version": "13.3.6.2",
+  "version": "0.0.0.0",
   "description": "Real-time, relevant knowledge inside Gmail",
   "permissions": [
   ],
@@ -11,9 +11,13 @@
   },
   "content_scripts": [
     {
-      "matches": [ "*://mail.google.com/*"],
-      "js" : ["async.min.js","jquery-1.8.2.min.js","underscore-min.js","date.js","jquery.dotdotdot-1.5.1.js","jsrender.js","jquery.views.js","jquery.observable.js","ldengine.js", "moment.min.js", "jquery-ui-1.10.1.custom.min.js"],
-      "css" : ["ldengine.css", "hint.min.css", "jquery-ui-1.10.1.custom.css"]
+      "matches": [ "*://mail.google.com/*" ],
+      "js": [ 
+        "jquery-1.8.2.min.js",
+        "async.min.js",
+        "bootstrap.js",
+        "options.js"
+      ]
     }
   ],
   "permissions": [
@@ -21,29 +25,11 @@
     "https://apps.engine.co/",
     "http://preview.engine.co/",
     "https://preview.engine.co/",
-    "http://127.0.0.1:3000/",
+    "https://127.0.0.1:3000/",
     "storage"
   ],
   "web_accessible_resources": [
-    "ldengine.tmpl",
-    "snippet.tmpl",
-    "popup.tmpl",
-    "progressbar.tmpl",
-    "unauthenticated.tmpl",
-    "senderInfo.tmpl",
-    "bottomBar.tmpl",
-    "noSnippets.tmpl",
-    "ajax-loader.gif",
-    "icon_close.gif",
-    "close_message.gif",
-    "image_anonymousLarge@2x.png",
-    "logo_engine@2x.png",
-    "logo_engine@2x_dark.png",
-	"search_glass.png",
-	"gmail.png",
-	"facebook.png",
-	"Twitter.png",
-	"logo_engine_dark.png"
+  	"logo_engine_dark.png"
   ],
   "options_page": "options.html",
   "browser_action": { 
