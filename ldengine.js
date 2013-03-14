@@ -384,7 +384,7 @@ var LDEngine = {
 						if( !loginRequested )
 						{
 							loginRequested = true;
-							window.open( LDEngine.sidebar.accountStatus.AuthUrl.url ,"popUp", "width=10,height=10" );
+							window.open( LDEngine.sidebar.accountStatus.AuthUrl.url ,"popUp", "width=400,height=400" );
 							$.link.unauthTemplate($('.lde-unauthenticated'), LDEngine.sidebar.accountStatus.AuthUrl);
 							LDEngine.sidebar.stopLoadingSpinner();
 							updateInterval = 
