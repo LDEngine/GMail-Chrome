@@ -384,17 +384,15 @@ var LDEngine = {
 						if( !loginRequested )
 						{
 							loginRequested = true;
-							window.open( LDEngine.sidebar.accountStatus.AuthUrl.url );
+							window.open( LDEngine.sidebar.accountStatus.AuthUrl.url ,"popUp", "width=10,height=10" );
+							$.link.unauthTemplate($('.lde-unauthenticated'), LDEngine.sidebar.accountStatus.AuthUrl);
+							LDEngine.sidebar.stopLoadingSpinner();
 							updateInterval = 
 									setInterval( 
 										function() {
 											loginXHR();
 										}, 1000);
 						}
-/*						$.link.unauthTemplate($('.lde-unauthenticated'), LDEngine.sidebar.accountStatus.AuthUrl);
-						LDEngine.sidebar.stopLoadingSpinner();
-						$('.lde-unauth-button').click( function () {
-						});*/
 					} 
 					else {
 						clearInterval(updateInterval);
