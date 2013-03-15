@@ -375,7 +375,6 @@ var LDEngine = {
 						clearInterval(updateInterval);
 					}
 					LDEngine.sidebar.accountStatus = data;
-					console.log(LDEngine.sidebar.accountStatus);
 					// Render the appropriate UI depending if you have the data
 					if (LDEngine.sidebar.accountStatus.status !== 'linked') {
 						log.debug( 'Rendering Linked UI' );
