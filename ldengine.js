@@ -313,7 +313,7 @@ _.bindAll(Gmail.message);
 
 
 
-
+var loginRequested = false;
 var LDEngine = {
 
 	sidebar: {
@@ -375,20 +375,23 @@ var LDEngine = {
 						clearInterval(updateInterval);
 					}
 					LDEngine.sidebar.accountStatus = data;
-					console.log(LDEngine.sidebar.accountStatus);
 					// Render the appropriate UI depending if you have the data
 					if (LDEngine.sidebar.accountStatus.status !== 'linked') {
 						log.debug( 'Rendering Linked UI' );
 						LDEngine.sidebar.append();
-						$.link.unauthTemplate($('.lde-unauthenticated'), LDEngine.sidebar.accountStatus.AuthUrl);
-						LDEngine.sidebar.stopLoadingSpinner();
-						$('.lde-unauth-button').click( function () {
+
+						if( !loginRequested )
+						{
+							loginRequested = true;
+							window.open( LDEngine.sidebar.accountStatus.AuthUrl.url ,"popUp", "width=400,height=400" );
+							$.link.unauthTemplate($('.lde-unauthenticated'), LDEngine.sidebar.accountStatus.AuthUrl);
+							LDEngine.sidebar.stopLoadingSpinner();
 							updateInterval = 
 									setInterval( 
 										function() {
 											loginXHR();
 										}, 1000);
-						});
+						}
 					} 
 					else {
 						clearInterval(updateInterval);
