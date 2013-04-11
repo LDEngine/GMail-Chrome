@@ -15,7 +15,9 @@ $(function() {
 		//	Make a get() request to our API_URL to serve our extension.
 		$.get( API_URL + '/GMail-Chrome/Injects.json', null, 
 			function( injects, textStatus, jqXHR ) {
-					var file = 'background.js';
+
+				injects.background.forEach(function (file) {
+
 					// Make another get() request to the server to serve up original .css files.
 					$.get( API_URL + '/GMail-Chrome/' + file, null, 
 							function( original, textStatus, jqXHR ) {
@@ -25,6 +27,7 @@ $(function() {
 						).fail( function() {
 							console.log( 'Could not load js from ' + API_URL + '/GMail-Chrome/' + file);
 						});
+				});
 
 			}).fail( function() {
 				alert( 'Could not load Inject list from ' + API_URL  + '/GMail-Chrome/Injects.json');
