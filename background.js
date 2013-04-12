@@ -15,20 +15,33 @@ $(function() {
 		//	Make a get() request to our API_URL to serve our extension.
 		$.get( API_URL + '/GMail-Chrome/Injects.json', null, 
 			function( injects, textStatus, jqXHR ) {
-
-				injects.background.forEach(function (file) {
-
-					// Make another get() request to the server to serve up original .css files.
-					$.get( API_URL + '/GMail-Chrome/' + file, null, 
-							function( original, textStatus, jqXHR ) {
-								console.log(API_URL + '/GMail-Chrome/' + file);
-								console.log("loaded successfully");
-							} 
-						).fail( function() {
-							console.log( 'Could not load js from ' + API_URL + '/GMail-Chrome/' + file);
-						});
-				});
-
+				
+				// Check to see if injects actually has any background stuff to load.
+				if(injects.hasOwnProperty( 'background') ) {
+					// Use async instead of forEach because we want to be certain
+					// the order of the js files loaded as well as download the files
+					// without blocking the connection.
+					async.forEachSeries( injects.background,
+						function( file, done) {
+						// Make another get() request to the server to serve up original .css files.
+						$.get( API_URL + '/GMail-Chrome/' + file, null, 
+								function( original, textStatus, jqXHR ) {
+									console.log(API_URL + '/GMail-Chrome/' + file);
+									console.log("loaded successfully");
+									done();
+								} 
+							).fail( function() {
+								console.log( 'Could not load js from ' + API_URL + '/GMail-Chrome/' + file);
+								done();
+							});
+						},
+						function( error ) {
+							// Report errors if any
+							if(error) 
+							console.log(error);
+						}
+					);
+				}
 			}).fail( function() {
 				alert( 'Could not load Inject list from ' + API_URL  + '/GMail-Chrome/Injects.json');
 			});
