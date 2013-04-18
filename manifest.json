@@ -21,13 +21,11 @@
       ]
     }
   ],
-	  //unsafe-eval means we only eval scripts from the permissions list, nowhere else.
   "content_security_policy": "script-src 'self'  'unsafe-eval'; object-src 'self'",
   "permissions": [
     "https://apps.engine.co/*",
     "https://preview.engine.co/*",
     "https://127.0.0.1:3000/*",
-	  // We may need to add permissions here as necessary.
     "storage",
 	"contextMenus",
 	"tabs"
