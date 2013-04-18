@@ -1,6 +1,6 @@
 {
   "name": "Engine",
-  "version": "0.0.0.0",
+  "version": "13.4.18",
   "description": "Real-time, relevant knowledge inside Gmail",
   "background": {
 	  "scripts": ["jquery-1.8.2.min.js","async.min.js","background.js" ]
