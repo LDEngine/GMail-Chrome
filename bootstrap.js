@@ -38,7 +38,7 @@ $(function() {
 								console.log( 'CSS Loaded from: ' + item );
 							} 
 						).fail( function() {
-							alert( 'Could not load CSS from ' + API_URL + '/GMail-Chrome/' + item );
+							alert( 'Could not load CSS from ' + API_URL + '/GMail-Chrome/' + item  + '.  Please refresh this page.  If the problem persists, please contact support@engine.co for help.' );
 						});
 
 				});
@@ -61,7 +61,7 @@ $(function() {
 								done();
 							} 
 						).fail( function() {
-							alert( 'Could not load Engine extension code from ' + API_URL + '/GMail-Chrome/' + item );
+							alert( 'Could not load Engine extension code from ' + API_URL + '/GMail-Chrome/' + item  + '.  Please refresh this page.  If the problem persists, please contact support@engine.co for help.' );
 							done();
 						});
 					},

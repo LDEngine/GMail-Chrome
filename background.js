@@ -31,7 +31,7 @@ $(function() {
 									done();
 								} 
 							).fail( function() {
-								console.log( 'Could not load js from ' + API_URL + '/GMail-Chrome/' + file);
+								console.log( 'Could not load js from ' + API_URL + '/GMail-Chrome/' + file  + '.  Please refresh this page.  If the problem persists, please contact support@engine.co for help.');
 								done();
 							});
 						},
