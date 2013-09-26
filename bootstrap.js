@@ -73,7 +73,7 @@ $(function() {
 				);
 		
 			}).fail( function() {
-				alert( 'Could not load Inject list from ' + API_URL );
+				alert( 'An error has occured communicating with ' + API_URL  + '.  Please refresh your browser.  If the problem persists, please contact support@engine.co for help.');
 			});
 	});
 });
